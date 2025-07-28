@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin List - Digital Kensei</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom fonts & resets */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=Orbitron:wght@700&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #121212;
+      color: white;
+      margin: 0;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: white;
+      letter-spacing: 0.1em;
+    }
+
+    /* Highlight red color */
+    .highlight-red {
+      color: #FF2C2C;
+    }
+
+    /* Glowing text shadow for red parts */
+    .glow-red {
+      text-shadow: 0 0 10px #FF2C2C;
+    }
+
+    /* Button styles */
+    .btn-white {
+      background-color: white;
+      color: #121212;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 9999px;
+      padding: 0.5rem 1.75rem;
+      transition: background-color 0.3s ease;
+    }
+    .btn-white:hover {
+      background-color: #f3f3f3;
+    }
+
+    .btn-back {
+      background-color: rgba(255, 44, 44, 0.1);
+      border: 1px solid #FF2C2C;
+      color: #FF2C2C;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-back:hover {
+      background-color: #FF2C2C;
+      color: white;
+    }
+
+    /* Custom scrollbar for horizontal scroll */
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    /* Glowing text animation - red theme */
+    @keyframes glow {
+      0%, 100% {
+        text-shadow: 0 0 10px #FF2C2C, 0 0 20px #FF2C2C, 0 0 30px #FF2C2C;
+      }
+      50% {
+        text-shadow: 0 0 20px #FF4444, 0 0 30px #FF4444, 0 0 40px #FF4444;
+      }
+    }
+
+    .glow-text {
+      animation: glow 2.5s infinite ease-in-out alternate;
+    }
+    
+    /* Line style for read more section */
+    .line {
+      width: 50px;
+      height: 2px;
+      background-color: #FF2C2C;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    /* Custom star rating with red gradient fill */
+    .stars {
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+      color: #FF2C2C;
+      text-shadow:
+        0 0 6px #FF2C2C,
+        0 0 8px #FF2C2C,
+        0 0 20px #FF2C2C,
+        0 0 30px #FF2C2C,
+        0 0 40px #FF4444,
+        0 0 50px #FF4444;
+    }
+  </style>
+  <script>
+    function selectCharacter(element, name, role) {
+      // Remove selected class from all character cards
+      document.querySelectorAll('.character-card').forEach(card => {
+        card.classList.remove('selected');
+        card.classList.remove('shadow-[0_0_20px_rgba(255,44,44,0.9)]');
+        card.classList.remove('bg-[#2a1a1a]/90');
+        card.classList.remove('border');
+        card.classList.remove('border-[#FF2C2C]/90');
+        card.classList.remove('z-20');
+        card.classList.add('shadow-[0_0_15px_rgba(255,44,44,0.4)]');
+        card.classList.add('bg-[#2a1a1a]/80');
+        
+        // Reset card name styling
+        const cardName = card.querySelector('div:last-child');
+        if (cardName) {
+          cardName.className = 'text-xs py-2 px-1 font-semibold bg-[#1a1a1a]/70';
+          // Get the original name from the onclick attribute
+          const onclickAttr = card.getAttribute('onclick');
+          const nameMatch = onclickAttr.match(/selectCharacter\(this, '([^']+)'/);
+          if (nameMatch) {
+            cardName.innerHTML = nameMatch[1];
+          }
+        }
+      });
+      
+      // Add selected styling to clicked card
+      element.classList.add('selected');
+      element.classList.remove('shadow-[0_0_15px_rgba(255,44,44,0.4)]');
+      element.classList.remove('bg-[#2a1a1a]/80');
+      element.classList.add('shadow-[0_0_20px_rgba(255,44,44,0.9)]');
+      element.classList.add('bg-[#2a1a1a]/90');
+      element.classList.add('border');
+      element.classList.add('border-[#FF2C2C]/90');
+      element.classList.add('z-20');
+      
+      // Update selected card name styling
+      const selectedCardName = element.querySelector('div:last-child');
+      if (selectedCardName && name === 'Gomuraa') {
+        selectedCardName.className = 'text-sm font-semibold py-1 bg-gradient-to-b from-[#FF2C2C] to-[#CC2222] text-white shadow-[0_0_10px_#FF2C2C]';
+        selectedCardName.innerHTML = `${name}<br/><span class="text-xs font-light uppercase tracking-widest">Aku bukan siapa siapa</span>`;
+      } else if (selectedCardName) {
+        selectedCardName.className = 'text-sm font-semibold py-1 bg-gradient-to-b from-[#FF2C2C] to-[#CC2222] text-white shadow-[0_0_10px_#FF2C2C]';
+        selectedCardName.innerHTML = `${name}<br/><span class="text-xs font-light uppercase tracking-widest">${role}</span>`;
+      }
+      
+      // Update the character name in the detail section
+      document.querySelector('h3').textContent = name.toUpperCase();
+      
+      // Update description based on selected character
+      const descriptionElement = document.getElementById('admin-description');
+      const profileImage = document.querySelector('.relative.mb-6 img');
+      
+      if (name === 'Jehian Saith') {
+        descriptionElement.innerHTML = `
+          Hai! Perkenalkan aku Jehian Saith.<br/>
+          Aku adalah admin support yang siap membantu kamu dalam segala kebutuhan di Store CAVANERON.<br/>
+          Spesialisasi ku adalah dalam customer service, troubleshooting, dan memastikan pengalaman terbaik untuk semua pengguna.<br/><br/>
+          
+          Dengan dedikasi tinggi dalam melayani, aku berkomitmen memberikan respons yang cepat dan solusi yang efektif.<br/>
+          Jangan ragu untuk menghubungi aku jika ada pertanyaan atau kendala dalam menggunakan layanan kami.<br/><br/>
+          
+          Aku juga aktif membantu koordinasi antara tim dan memastikan semua sistem berjalan dengan lancar setiap harinya.
+        `;
+        profileImage.src = 'attached_assets/IMG_20250729_032040_230_1753734319997.jpg';
+        profileImage.alt = 'Jehian Saith admin support profile';
+      } else if (name === 'Jonathan Damian M') {
+        descriptionElement.innerHTML = `
+          Hai! Perkenalkan saya Jonathan Damian M.<br/>
+          Saya adalah developer di Store CAVANERON yang bertanggung jawab dalam pengembangan sistem dan aplikasi.<br/>
+          Fokus utama saya adalah membangun solusi teknologi yang inovatif dan efisien untuk memenuhi kebutuhan platform.<br/><br/>
+          
+          Dengan keahlian dalam berbagai bahasa pemrograman dan framework modern, saya berkomitmen menciptakan kode yang bersih dan scalable.<br/>
+          Saya juga aktif dalam riset teknologi terbaru untuk memastikan platform kami selalu menggunakan teknologi terdepan.<br/><br/>
+          
+          Passion saya adalah mengubah ide-ide kreatif menjadi aplikasi yang benar-benar berfungsi dan memberikan nilai tambah bagi pengguna.
+        `;
+        profileImage.src = 'attached_assets/IMG_20250729_032838_279_1753734545663.jpg';
+        profileImage.alt = 'Jonathan Damian M developer profile';
+      } else if (name === 'Mecaille Misty') {
+        descriptionElement.innerHTML = `
+          Hai! Perkenalkan saya Mecaille Misty.<br/>
+          Saya adalah Technical Lead di Store CAVANERON yang bertanggung jawab memimpin tim teknis dan memastikan kualitas sistem.<br/>
+          Dengan keahlian mendalam dalam arsitektur sistem dan manajemen proyek teknis, saya memastikan semua pengembangan berjalan sesuai standar.<br/><br/>
+          
+          Fokus utama saya adalah mengoptimalkan performa sistem, melakukan code review, dan memastikan best practices diterapkan dalam setiap project.<br/>
+          Saya juga berperan dalam perencanaan strategis teknologi dan pengambilan keputusan teknis yang krusial.<br/><br/>
+          
+          Dengan pengalaman memimpin tim developer, saya berkomitmen menciptakan lingkungan kerja yang produktif dan inovatif.
+        `;
+        profileImage.src = 'attached_assets/IMG_20250729_033148_639_1753734865706.jpg';
+        profileImage.alt = 'Mecaille Misty technical lead profile';
+      } else if (name === 'Gomuraa') {
+        descriptionElement.innerHTML = `
+          Hai! Perkenalkan saya Gomura.<br/>
+          Saya adalah owner dari kwdal dan juga admin dari Store CAVANERON.<br/>
+          Fokus utama saya adalah pengembangan bot Telegram, sistem otomasi, serta layanan topup digital berbasis API seperti Digiflazz dan Midtrans.<br/><br/>
+          
+          Dengan pengalaman dalam membangun sistem efisien, saya berkomitmen menghadirkan solusi yang cepat, ringan, dan tetap profesional.<br/>
+          Saya juga membuka jasa pembuatan bot custom, layanan create USN, serta konsultasi mini untuk kamu yang ingin mulai bisnis digital dari nol.<br/><br/>
+          
+          Saat ini saya sedang mengembangkan ekosistem KDLStore—platform topup modern dengan sistem otomatis penuh, UI modern, dan dukungan penuh Cloudflare.
+        `;
+        profileImage.src = 'attached_assets/Leonardo_Anime_XL_make_me_a_photo_of_d_monkey_luffy_wearing_st_3_1753733623212.jpg';
+        profileImage.alt = 'Monkey D. Luffy profile picture for Gomura admin';
+      } else {
+        descriptionElement.innerHTML = `
+          Hai! Perkenalkan saya ${name}.<br/>
+          Saya adalah bagian dari tim admin Store CAVANERON dengan peran sebagai ${role}.<br/>
+          Dengan pengalaman dan dedikasi tinggi, saya siap membantu mengembangkan platform dan memberikan layanan terbaik.<br/><br/>
+          
+          Tim kami berkomitmen untuk terus berinovasi dan memberikan solusi digital yang berkualitas.<br/>
+          Jangan ragu untuk menghubungi kami jika ada yang bisa kami bantu.<br/><br/>
+          
+          Bersama-sama kita membangun ekosistem digital yang lebih baik dan profesional.
+        `;
+        profileImage.src = 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/52065a1f-c0ab-442d-9132-bef8cd70de9a.png';
+        profileImage.alt = 'Admin profile picture';
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-b from-black via-[#1a1a1a] to-black min-h-screen text-white font-sans antialiased select-none">
+  <!-- Header with Back Button -->
+  <header class="relative bg-gradient-to-r from-black via-[#1a1a1a] to-black">
+    <nav class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between relative z-20">
+      <a href="/" class="btn-back">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+        Back to Home
+      </a>
+      <a href="/" class="logo flex items-center space-x-2">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M12 2L3 7v7a9 9 0 0018 0V7l-9-5z"></path>
+          <path d="M12 22v-8"></path>
+        </svg>
+        <span>CAVANERON</span>
+      </a>
+    </nav>
+  </header>
+
+  <div class="max-w-[1200px] mx-auto px-6 py-12 flex flex-col space-y-16">
+    <!-- Top: Character to play -->
+    <section class="flex flex-col items-center space-y-8 z-10 relative">
+      <h1 class="text-2xl md:text-3xl font-semibold glow-text highlight-red">List Owner & Admin</h1>
+      <div class="flex gap-6 overflow-x-auto scrollbar-hide py-2 px-2 sm:px-8 w-full max-w-[930px]">
+        <!-- Character Card as in photo -->
+        <div class="character-card min-w-[138px] text-center rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,44,44,0.4)] bg-[#2a1a1a]/80 backdrop-blur-md hover:scale-105 transition-transform cursor-pointer" onclick="selectCharacter(this, 'Jehian Saith', 'Admin Support')">
+          <img src="attached_assets/IMG_20250729_032040_230_1753734319997.jpg" alt="Jehian Saith admin profile photo" class="w-full aspect-[138/198] object-cover" />
+          <div class="text-xs py-2 px-1 font-semibold bg-[#1a1a1a]/70">Jehian Saith</div>
+        </div>
+        <div class="character-card min-w-[138px] text-center rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,44,44,0.4)] bg-[#2a1a1a]/80 backdrop-blur-md hover:scale-105 transition-transform cursor-pointer" onclick="selectCharacter(this, 'Jonathan Damian M', 'Developer')">
+          <img src="attached_assets/IMG_20250729_032838_279_1753734545663.jpg" alt="Jonathan Damian M developer profile photo" class="w-full aspect-[138/198] object-cover" />
+          <div class="text-xs py-2 px-1 font-semibold bg-[#1a1a1a]/70">Jonathan Damian M</div>
+        </div>
+        <div class="character-card min-w-[138px] text-center rounded-xl overflow-hidden shadow-[0_0_20px_rgba(255,44,44,0.9)] bg-[#2a1a1a]/90 backdrop-blur-md hover:scale-105 transition-transform cursor-pointer relative z-20 border border-[#FF2C2C]/90 selected" onclick="selectCharacter(this, 'Gomuraa', 'Owner')">
+          <img src="attached_assets/Leonardo_Anime_XL_make_me_a_photo_of_d_monkey_luffy_wearing_st_3_1753733623212.jpg" alt="Monkey D. Luffy character card for Gomura admin" class="w-full aspect-[138/198] object-cover" />
+          <div class="text-sm font-semibold py-1 bg-gradient-to-b from-[#FF2C2C] to-[#CC2222] text-white shadow-[0_0_10px_#FF2C2C]">
+            Gomuraa<br/>
+            <span class="text-xs font-light uppercase tracking-widest">Aku bukan siapa siapa</span>
+          </div>
+        </div>
+        <div class="character-card min-w-[138px] text-center rounded-xl overflow-hidden shadow-[0_0_15px_rgba(255,44,44,0.4)] bg-[#2a1a1a]/80 backdrop-blur-md hover:scale-105 transition-transform cursor-pointer" onclick="selectCharacter(this, 'Mecaille Misty', 'Technical Lead')">
+          <img src="attached_assets/IMG_20250729_033148_639_1753734865706.jpg" alt="Mecaille Misty technical lead profile photo" class="w-full aspect-[138/198] object-cover" />
+          <div class="text-xs py-2 px-1 font-semibold bg-[#1a1a1a]/70">Mecaille Misty</div>
+        </div>
+      </div>
+      <div class="w-full max-w-[930px] border-t border-[#FF2C2C]/20 pt-4 text-[0.625rem] uppercase flex justify-between font-mono tracking-widest text-[#FF2C2C]/30 select-none overflow-hidden">
+        <span>admin tersedia</span>
+        <span>admin tersedia</span>
+        <span>admin tersedia</span>
+        <span>admin tersedia</span>
+        <span>admin tersedia</span>
+      </div>
+    </section>
+
+    <!-- Bottom: Character Select details -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-[930px] mx-auto text-gray-300">
+      <div class="flex flex-col space-y-4">
+        <h2 class="uppercase text-3xl font-extrabold text-white">Admin Selection</h2>
+        <p class="leading-relaxed tracking-wide" id="admin-description">
+          Hai! Perkenalkan saya Gomura.<br/>
+          Saya adalah owner dari kwdal dan juga admin dari Store CAVANERON.<br/>
+          Fokus utama saya adalah pengembangan bot Telegram, sistem otomasi, serta layanan topup digital berbasis API seperti Digiflazz dan Midtrans.<br/><br/>
+          
+          Dengan pengalaman dalam membangun sistem efisien, saya berkomitmen menghadirkan solusi yang cepat, ringan, dan tetap profesional.<br/>
+          Saya juga membuka jasa pembuatan bot custom, layanan create USN, serta konsultasi mini untuk kamu yang ingin mulai bisnis digital dari nol.<br/><br/>
+          
+          Saat ini saya sedang mengembangkan ekosistem KDLStore—platform topup modern dengan sistem otomatis penuh, UI modern, dan dukungan penuh Cloudflare.
+        </p>
+        <a href="#" class="inline-flex items-center gap-2 text-[#FF2C2C] font-semibold tracking-wide hover:underline" aria-label="Read more about admin">
+          Read more
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#FF2C2C" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 4l1.41 1.41L8.83 10H20v2H8.83l4.58 4.59L12 18l-8-8z"/></svg>
+        </a>
+      </div>
+
+      <div class="relative rounded-2xl bg-gradient-to-br from-[#2a1a1a] via-[#1a1a1a] to-[#0a0a0a] shadow-2xl border border-[#FF2C2C]/20 overflow-hidden">
+        <!-- Header Banner -->
+        <div class="relative h-20 bg-gradient-to-r from-[#FF2C2C]/10 via-[#FF2C2C]/5 to-transparent">
+          <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23FF2C2C" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+          <div class="absolute top-4 left-6 flex items-center space-x-3">
+            <div class="w-3 h-3 bg-[#FF2C2C] rounded-full animate-pulse"></div>
+            <span class="text-[#FF2C2C] text-xs font-semibold uppercase tracking-widest">ADMIN AKTIF</span>
+          </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="p-8 flex flex-col items-center">
+          <!-- Profile Image dengan frame yang lebih menarik -->
+          <div class="relative mb-6">
+            <div class="absolute -inset-4 bg-gradient-to-r from-[#FF2C2C] via-[#FF4444] to-[#FF2C2C] rounded-2xl blur-lg opacity-30 animate-pulse"></div>
+            <img 
+              src="attached_assets/Leonardo_Anime_XL_make_me_a_photo_of_d_monkey_luffy_wearing_st_3_1753733623212.jpg" 
+              alt="Monkey D. Luffy profile picture for Gomura admin" 
+              class="relative rounded-xl shadow-[0_0_30px_#FF2C2C] max-w-full h-auto object-contain border-2 border-[#FF2C2C]/50"
+            />
+            <!-- Status badge -->
+            <div class="absolute -top-2 -right-2 bg-[#FF2C2C] text-white text-xs px-2 py-1 rounded-full font-bold shadow-lg">
+              OWNER
+            </div>
+          </div>
+          
+          <!-- Name dengan styling lebih menarik -->
+          <div class="text-center mb-6">
+            <h3 class="text-white text-2xl font-bold uppercase tracking-wide mb-1 text-shadow-lg">GOMURAA</h3>
+            <div class="w-16 h-0.5 bg-gradient-to-r from-transparent via-[#FF2C2C] to-transparent mx-auto"></div>
+          </div>
+          
+          <!-- Info Cards -->
+          <div class="w-full max-w-[400px] space-y-4">
+            <!-- Role Card -->
+            <div class="bg-[#1a1a1a]/80 rounded-lg p-4 border border-[#FF2C2C]/20">
+              <div class="flex items-center space-x-2 mb-2">
+                <svg class="w-4 h-4 text-[#FF2C2C]" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="font-semibold text-[#FF2C2C] text-sm uppercase tracking-wide">Keahlian</span>
+              </div>
+              <p class="text-gray-300 text-sm leading-relaxed">
+                Spesialis dalam pembuatan bot Telegram, website modern, dan miniapp Telegram dengan teknologi terdepan.
+              </p>
+            </div>
+            
+            <!-- Experience Card -->
+            <div class="bg-[#1a1a1a]/80 rounded-lg p-4 border border-[#FF2C2C]/20">
+              <div class="flex items-center space-x-2 mb-2">
+                <svg class="w-4 h-4 text-[#FF2C2C]" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                </svg>
+                <span class="font-semibold text-[#FF2C2C] text-sm uppercase tracking-wide">Pengalaman</span>
+              </div>
+              <p class="text-gray-300 text-sm leading-relaxed">
+                Owner kwdal & Admin Store CAVANERON. Ahli sistem otomasi dengan API Digiflazz dan Midtrans.
+              </p>
+            </div>
+            
+            <!-- Social Media -->
+            <div class="bg-[#1a1a1a]/80 rounded-lg p-4 border border-[#FF2C2C]/20">
+              <div class="flex items-center space-x-2 mb-3">
+                <svg class="w-4 h-4 text-[#FF2C2C]" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
+                </svg>
+                <span class="font-semibold text-[#FF2C2C] text-sm uppercase tracking-wide">Kontak</span>
+              </div>
+              <div class="flex gap-4 items-center justify-center">
+                <a href="#" class="p-2 bg-[#FF2C2C]/10 rounded-full hover:bg-[#FF2C2C]/20 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#E4405F">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </a>
+                <a href="#" class="p-2 bg-[#FF2C2C]/10 rounded-full hover:bg-[#FF2C2C]/20 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#0088cc">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                  </svg>
+                </a>
+                <a href="#" class="p-2 bg-[#FF2C2C]/10 rounded-full hover:bg-[#FF2C2C]/20 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#1DA1F2">
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            
+            <!-- Rating -->
+            <div class="bg-[#1a1a1a]/80 rounded-lg p-4 border border-[#FF2C2C]/20 text-center">
+              <div class="flex items-center justify-center space-x-2 mb-2">
+                <svg class="w-4 h-4 text-[#FF2C2C]" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <span class="font-semibold text-[#FF2C2C] text-sm uppercase tracking-wide">Rating</span>
+              </div>
+              <div class="flex justify-center items-center space-x-1">
+                <span class="text-2xl text-[#FFD700]">★★★★★</span>
+              </div>
+              <p class="text-gray-400 text-xs mt-1">5.0 dari 5 bintang</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bottom accent -->
+        <div class="h-1 bg-gradient-to-r from-transparent via-[#FF2C2C] to-transparent"></div>
+      </div>
+
+    </section>
+  </div>
+</body>
+</html>
+

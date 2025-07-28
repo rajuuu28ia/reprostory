@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CAVANERON - NFT Cyber Samurai Collection</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom fonts & resets */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=Orbitron:wght@700&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #121212;
+      color: white;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.125rem;
+      color: white;
+      letter-spacing: 0.1em;
+    }
+
+    /* Highlight red color */
+    .highlight-red {
+      color: #FF2C2C;
+    }
+
+    /* Glowing text shadow for red parts */
+    .glow-red {
+      text-shadow: 0 0 10px #FF2C2C, 0 0 20px #FF2C2C, 0 0 30px #FF2C2C;
+    }
+    
+    /* Enhanced text shadows for overlay text */
+    .text-shadow-xl {
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5);
+    }
+    .drop-shadow-2xl {
+      filter: drop-shadow(2px 2px 6px rgba(0,0,0,0.9));
+    }
+
+    /* For top heading lines broken into parts */
+    .heading-part {
+      line-height: 1.1;
+    }
+
+    /* Button styles */
+    .btn-white {
+      background-color: white;
+      color: #121212;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: 9999px;
+      padding: 0.5rem 1.75rem;
+      transition: background-color 0.3s ease;
+    }
+    .btn-white:hover {
+      background-color: #f3f3f3;
+    }
+
+    /* Testimonial title styling */
+    .testimonial-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      color: #FF2C2C;
+      font-size: 1.2rem;
+      line-height: 1;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Semi-transparent black with blur for right top box */
+    .glass-box {
+      background: rgba(18, 18, 18, 0.8);
+      padding: 1.5rem;
+      max-width: 280px;
+      color: #ccc;
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* Small red bullet */
+    .red-dot {
+      background: #FF2C2C;
+      width: 10px;
+      height: 10px;
+      border-radius: 9999px;
+      display: inline-block;
+      margin-right: 0.75rem;
+      vertical-align: middle;
+    }
+
+    /* Section Background */
+    #intro-section {
+      background: #f9fafb;
+      color: #121212;
+      border-radius: 2rem 2rem 0 0;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    /* Overlapping image on left with cherry blossoms */
+    .cherry-blossom-img {
+      max-width: 320px;
+      filter: drop-shadow(0 0 7px rgba(0,0,0,0.1));
+    }
+
+    /* Text with highlights and overlay images on words */
+    .highlight-text {
+      font-weight: 700;
+      font-size: 2.5rem;
+      line-height: 1.2;
+      max-width: 700px;
+      position: relative;
+    }
+
+    /* Gray sub text styling */
+    .gray-text {
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: #999999;
+      line-height: 1.2;
+      max-width: 700px;
+      margin-left: 5px;
+    }
+
+    @media (min-width: 640px) {
+      .highlight-text, .gray-text {
+        font-size: 3.5rem;
+      }
+      #intro-section {
+        padding: 6rem 3rem 8rem;
+      }
+    }
+
+    /* Icon boxes styling */
+    .icon-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      max-width: 320px;
+    }
+    .icon-box svg {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      fill: #FF2C2C;
+      margin-top: 4px;
+    }
+    .icon-texts {
+      display: flex;
+      flex-direction: column;
+    }
+    .icon-title {
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin-bottom: 0.25rem;
+      color: #2E2E2E;
+    }
+    .icon-desc {
+      font-size: 0.875rem;
+      color: #555555;
+      line-height: 1.3;
+    }
+
+    /* 3D Curved Carousel Styles */
+    .carousel-container {
+      perspective: 1200px;
+      perspective-origin: center center;
+      padding: 10px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    
+    @media (min-width: 640px) {
+      .carousel-container {
+        padding: 20px;
+        height: 250px;
+      }
+    }
+    
+    .carousel-track {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      height: 100%;
+      transform-style: preserve-3d;
+      margin: 0 auto;
+    }
+    
+    .carousel-item {
+      position: absolute;
+      width: 100%;
+      max-width: 280px;
+      height: 160px;
+      transition: all 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transform-origin: center center;
+      opacity: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    @media (min-width: 640px) {
+      .carousel-item {
+        max-width: 350px;
+        height: 180px;
+      }
+    }
+    
+    .testimonial-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem;
+    }
+    
+    @media (min-width: 640px) {
+      .testimonial-card {
+        padding: 1.5rem;
+      }
+    }
+    
+    .stars {
+      color: #FFD700;
+      font-size: 0.8rem;
+    }
+    
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+    }
+    
+    .nav-dot.active {
+      background: #FF2C2C;
+      border-color: #FF2C2C;
+      transform: scale(1.3);
+      box-shadow: 0 0 8px rgba(255, 44, 44, 0.5);
+    }
+    
+    .carousel-nav {
+      margin-top: 20px !important;
+      z-index: 50;
+      position: relative;
+    }
+
+    /* Responsive adjustments */
+    @media (min-width: 1024px) {
+      .glass-box {
+        max-width: 260px;
+        font-size: 0.9rem;
+      }
+      .highlight-text, .gray-text {
+        font-size: 4rem;
+      }
+    }
+
+  </style>
+</head>
+<body class="relative">
+
+  <!-- Top Hero Banner section -->
+  <header class="relative bg-gradient-to-r from-black via-[#1a1a1a] to-black overflow-hidden h-screen flex flex-col">
+
+    <nav class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between relative z-20 w-full">
+      <a href="#" class="logo flex items-center space-x-2">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M12 2L3 7v7a9 9 0 0018 0V7l-9-5z"></path>
+          <path d="M12 22v-8"></path>
+        </svg>
+        <span>CAVANERON</span>
+      </a>
+      <div class="flex items-center space-x-6">
+        <button id="hamburger-menu" class="text-white font-semibold text-sm tracking-wide flex items-center space-x-2" aria-label="Open menu">
+          <span>Menu</span>
+          <div class="flex flex-col space-y-1">
+            <div class="w-4 h-0.5 bg-white transition-all duration-300" id="line1"></div>
+            <div class="w-4 h-0.5 bg-white transition-all duration-300" id="line2"></div>
+            <div class="w-4 h-0.5 bg-white transition-all duration-300" id="line3"></div>
+          </div>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Dropdown Menu -->
+    <div id="dropdown-menu" class="fixed top-20 right-6 mt-2 w-64 bg-black shadow-2xl transform translate-y-[-10px] opacity-0 invisible transition-all duration-300" style="z-index: 9999; background-color: rgba(0, 0, 0, 0.95);">
+      <div class="p-4">
+        <nav class="space-y-3">
+          <a href="admin-list.html" id="admin-link" class="block px-4 py-3 text-white hover:bg-red-600 transition-colors duration-200 flex items-center space-x-3">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>List Admin</span>
+          </a>
+          <a href="#" class="block px-4 py-3 text-gray-400 hover:bg-gray-700 transition-colors duration-200 flex items-center space-x-3 cursor-not-allowed">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <path d="M21 15l-5-5L5 21"></path>
+            </svg>
+            <span>Produk <span class="text-xs">(segera hadir)</span></span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Hero section with Luffy background - Full screen height -->
+    <div class="absolute inset-0 w-full h-full">
+      <img 
+        src="attached_assets/Leonardo_Anime_XL_make_me_a_photo_of_d_monkey_luffy_wearing_st_3_1753735375225.jpg" 
+        alt="Monkey D. Luffy background illustration" 
+        class="w-full h-full object-cover object-center"
+        style="filter: brightness(0.9) contrast(1.1);"
+      />
+    </div>
+
+    <!-- Content overlay if needed -->
+    <main class="flex-1 flex items-center max-w-7xl mx-auto relative px-6 w-full z-10">
+      <!-- Any content that should appear over the image can go here -->
+    </main>
+
+  </header>
+
+  <!-- Second section: white background with text and images on both sides -->
+  <section id="intro-section" class="relative z-10 -mt-1">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12 px-6">
+
+
+
+      <!-- Middle Text Content -->
+      <div class="flex-1 max-w-2xl text-center lg:text-left">
+        <p class="text-sm mb-3 font-semibold uppercase text-gray-500 tracking-wide select-text">Tentang Kami</p>
+
+        <h2 class="text-4xl md:text-5xl font-extrabold max-w-xl tracking-tight leading-snug text-gray-900" style="font-family: 'Inter', sans-serif;">
+          <span class="inline-flex items-center mb-2"><span class="red-dot"></span></span>
+          CAVANERON adalah store telegram yang menjual berbagai produk seperti 
+          <span class="highlight-red font-bold ml-2 mr-2" style="text-shadow: 0 0 4px #FF2C2C;">Teleprem</span>
+          , Star Telegram,
+        </h2>
+
+        <h2 class="gray-text leading-snug font-extrabold max-w-xl mt-0 select-text">
+          dan jasa lainnya untuk kebutuhan anda di telegram
+        </h2>
+
+        <p class="mt-5 text-sm max-w-md text-gray-600 font-medium leading-relaxed">
+          Each warrior is a unique digital artifact based on battle code and artificial intelligence.
+        </p>
+
+        <!-- Features grid -->
+        <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-y-10 gap-x-12 max-w-4xl">
+
+          <div class="icon-box select-text">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" >
+              <path d="M16 6H8C6.9 6 6 6.9 6 8V16C6 17.1 6.9 18 8 18H16C17.1 18 18 17.1 18 16V8C18 6.9 17.1 6 16 6Z" stroke="#FF2C2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 9H15V15H9V9Z" stroke="#FF2C2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="icon-texts">
+              <span class="icon-title">Waktu Pengerjaan</span>
+              <span class="icon-desc">5-30 menit pengerjaan dan Sat Set</span>
+            </div>
+          </div>
+
+          <div class="icon-box select-text">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" >
+              <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15" stroke="#FF2C2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="#FF2C2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="icon-texts">
+              <span class="icon-title">Termurah</span>
+              <span class="icon-desc">Termurah dari store store lain yang ada di telegram</span>
+            </div>
+          </div>
+
+          <div class="icon-box select-text">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" >
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#FF2C2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="icon-texts">
+              <span class="icon-title">Terlengkap</span>
+              <span class="icon-desc">Semua terlengkap dari kebutuhan telegram yang anda inginkan ada di store kami</span>
+            </div>
+          </div>
+
+          <div class="icon-box select-text">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" >
+              <circle cx="12" cy="8" r="3" stroke="#FF2C2C" stroke-width="2"/>
+              <path d="M17 21V19C17 16.7909 15.2091 15 13 15H11C8.79086 15 7 16.7909 7 19V21" stroke="#FF2C2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="icon-texts">
+              <span class="icon-title">Dukungan Admin</span>
+              <span class="icon-desc">Setiap keluhan akan ditanggapi oleh admin dengan waktu yang sangat cepat tergantung jam operasional</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+
+    </div>
+  </section>
+
+  <!-- Testimonials Section at Bottom -->
+  <section class="relative py-8 sm:py-16 bg-gradient-to-r from-black via-[#1a1a1a] to-black">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8 sm:mb-12">
+        <h2 class="testimonial-title text-lg sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-4 px-2">Testimoni Pengguna</h2>
+        <p class="text-gray-300 max-w-2xl mx-auto text-xs sm:text-sm md:text-base px-2 leading-relaxed">Apa kata pembeli tentang Cavaneron Store</p>
+      </div>
+      
+      <!-- 3D Curved Carousel Container -->
+      <div class="carousel-container relative overflow-hidden mb-6">
+        <div class="carousel-track" id="testimonialCarousel">
+          <!-- Testimonial 1 -->
+          <div class="carousel-item active">
+            <div class="glass-box testimonial-card">
+              <div class="stars mb-2">⭐⭐⭐⭐⭐</div>
+              <p class="text-sm italic">"Pengerjaannya sangat cepat, dan adminnya ramah. Cocok untuk anak sekolah 🥰"</p>
+              <span class="text-xs text-gray-400 mt-2 block">- Rian S.</span>
+            </div>
+          </div>
+          
+          <!-- Testimonial 2 -->
+          <div class="carousel-item">
+            <div class="glass-box testimonial-card">
+              <div class="stars mb-2">⭐⭐⭐⭐⭐</div>
+              <p class="text-sm italic">"beli Teleprem di sini sangat murah, dan adminnya juga cepat dalam mengobrol."</p>
+              <span class="text-xs text-gray-400 mt-2 block">- Maya K.</span>
+            </div>
+          </div>
+          
+          <!-- Testimonial 3 -->
+          <div class="carousel-item">
+            <div class="glass-box testimonial-card">
+              <div class="stars mb-2">⭐⭐⭐⭐⭐</div>
+              <p class="text-sm italic">"Izin untuk isi testimoni. Bot pembuatan pengguna sudah bagus, tetapi fiturnya perlu ditingkatkan. tapi udah bagus"</p>
+              <span class="text-xs text-gray-400 mt-2 block">- Dimas A.</span>
+            </div>
+          </div>
+          
+          <!-- Testimonial 4 -->
+          <div class="carousel-item">
+            <div class="glass-box testimonial-card">
+              <div class="stars mb-2">⭐⭐⭐⭐⭐</div>
+              <p class="text-sm italic">"star tele murah banget sayang banget bintang testimoninnya cuma 5, coba sepuluh aku kasih sepuluh"</p>
+              <span class="text-xs text-gray-400 mt-2 block">- Farhan L.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Hamburger Menu JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburgerMenu = document.getElementById('hamburger-menu');
+      const dropdownMenu = document.getElementById('dropdown-menu');
+      const line1 = document.getElementById('line1');
+      const line2 = document.getElementById('line2');
+      const line3 = document.getElementById('line3');
+      let isMenuOpen = false;
+
+      function toggleMenu() {
+        isMenuOpen = !isMenuOpen;
+        
+        if (isMenuOpen) {
+          // Show menu
+          dropdownMenu.classList.remove('opacity-0', 'invisible', 'translate-y-[-10px]');
+          dropdownMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+          
+          // Animate hamburger to X
+          line1.style.transform = 'rotate(45deg) translateY(4px)';
+          line2.style.opacity = '0';
+          line3.style.transform = 'rotate(-45deg) translateY(-4px)';
+        } else {
+          // Hide menu
+          dropdownMenu.classList.add('opacity-0', 'invisible', 'translate-y-[-10px]');
+          dropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+          
+          // Animate X back to hamburger
+          line1.style.transform = 'rotate(0) translateY(0)';
+          line2.style.opacity = '1';
+          line3.style.transform = 'rotate(0) translateY(0)';
+        }
+      }
+
+      // Toggle menu on click
+      if (hamburgerMenu) {
+        hamburgerMenu.addEventListener('click', function(e) {
+          e.preventDefault();
+          toggleMenu();
+        });
+      }
+
+      // Close menu when clicking outside
+      document.addEventListener('click', function(event) {
+        if (hamburgerMenu && dropdownMenu && !hamburgerMenu.contains(event.target) && !dropdownMenu.contains(event.target)) {
+          if (isMenuOpen) {
+            toggleMenu();
+          }
+        }
+      });
+
+      // Close menu on escape key
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && isMenuOpen) {
+          toggleMenu();
+        }
+      });
+
+      // Close menu when admin link is clicked
+      const adminLink = document.getElementById('admin-link');
+      if (adminLink) {
+        adminLink.addEventListener('click', function() {
+          if (isMenuOpen) {
+            toggleMenu();
+          }
+        });
+      }
+    });
+
+    // 3D Curved Carousel JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+      const carousel = document.getElementById('testimonialCarousel');
+      const items = carousel.querySelectorAll('.carousel-item');
+      let currentSlide = 0;
+      let autoSlideInterval;
+
+      function updateCarousel() {
+        const radius = 250; // Radius of the curve
+        const itemSpacing = 120; // Degrees between items
+        
+        items.forEach((item, index) => {
+          const offset = index - currentSlide;
+          const angle = offset * itemSpacing;
+          
+          // Calculate curved position centered perfectly
+          const rotateY = angle;
+          const translateX = Math.sin(angle * Math.PI / 180) * radius;
+          const translateZ = Math.cos(angle * Math.PI / 180) * radius - radius;
+          
+          // Scale and opacity based on position
+          let scale = 1;
+          let opacity = 1;
+          let zIndex = 10;
+          
+          if (index === currentSlide) {
+            // Active item - center front, perfectly centered
+            scale = 1;
+            opacity = 1;
+            zIndex = 20;
+          } else if (Math.abs(offset) === 1) {
+            // Adjacent items
+            scale = 0.85;
+            opacity = 0.7;
+            zIndex = 15;
+          } else {
+            // Far items
+            scale = 0.6;
+            opacity = 0.4;
+            zIndex = 5;
+          }
+          
+          item.style.transform = `
+            translateX(-50%) 
+            rotateY(${rotateY}deg) 
+            translateX(${translateX}px) 
+            translateZ(${translateZ}px) 
+            scale(${scale})
+          `;
+          item.style.opacity = opacity;
+          item.style.zIndex = zIndex;
+        });
+      }
+
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % items.length;
+        updateCarousel();
+      }
+
+      function goToSlide(slideIndex) {
+        currentSlide = slideIndex;
+        updateCarousel();
+      }
+
+      function startAutoSlide() {
+        autoSlideInterval = setInterval(nextSlide, 4000);
+      }
+
+      function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+      }
+
+      // Initialize carousel
+      updateCarousel();
+      startAutoSlide();
+
+
+
+      // Pause auto-slide on hover
+      carousel.addEventListener('mouseenter', stopAutoSlide);
+      carousel.addEventListener('mouseleave', startAutoSlide);
+    });
+  </script>
+
+</body>
+</html>
+
